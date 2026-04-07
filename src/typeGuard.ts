@@ -9,6 +9,7 @@ export function isApiResponse(t: unknown): t is ApiResponse {
 }
 
 function isApiMealArray(t: unknown[]): t is ApiMeal[] {
+
     if (t.length === 0) {
         return true
     }

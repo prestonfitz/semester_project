@@ -1,4 +1,12 @@
-﻿// This is a fairly small app (only 3-5 pages). There are parts of each of the object that can show up on
+﻿export const testRecipe: Recipe = {
+    id: "1",
+    title: "test",
+    genre: "italian",
+    category: "dinner",
+    ingredients: [{name: "noodles", measurement: "1 lbs"}, {name: "sauce", measurement: "1 can"}],
+    instructions: ["you put your right hand in", "you put your right hand out", "you put your right hand in", "and you shake it all about"]
+}
+// This is a fairly small app (only 3-5 pages). There are parts of each of the object that can show up on
 // the home page as well as one or more children. As such, most of this will have to live at the top level.
 // Fortunately, this is a fairly small app, so we won't do tons of drilling.
 
@@ -11,6 +19,12 @@ export type FetchError =
     | {type: 'network', message: string}
     | {type: 'http', status: number, statusText: string}
     | {type: 'parse', message: string}
+
+export type ApiStatus =
+    | {status: 'idle'}
+    | {status: 'loading'}
+    | {status: 'error', error: FetchError}
+    | {status: 'success', data: Recipe[]}
 
 // This is the recipe as I will display it.
 export type Recipe = {
