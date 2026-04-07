@@ -9,12 +9,11 @@ export function isApiResponse(t: unknown): t is ApiResponse {
 }
 
 function isApiMealArray(t: unknown[]): t is ApiMeal[] {
-
     if (t.length === 0) {
         return true
     }
 
-    for (const meal in t) {
+    for (const meal of t) {
         if (!isApiMeal(meal)) {
             return false
         }
@@ -24,7 +23,7 @@ function isApiMealArray(t: unknown[]): t is ApiMeal[] {
 }
 
 function isApiMeal(t: unknown): t is ApiMeal {
-    return typeof (t as any).id === 'string' &&
+    return typeof (t as any).idMeal === 'string' &&
         typeof (t as any).strMeal === 'string' &&
         typeof (t as any).strCategory === 'string' &&
         typeof (t as any).strArea === 'string' &&

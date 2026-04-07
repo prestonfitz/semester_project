@@ -2,8 +2,10 @@ import './App.css'
 import type {Recipe} from './types.ts'
 import RecipeViewer from './RecipeViewer.tsx'
 import Search from './search.tsx'
+import {useState} from 'react'
 
 function App() {
+    const [recipe, changeRecipe] = useState<Recipe | null>(null)
   return (
     <>
       <section>
@@ -16,8 +18,10 @@ function App() {
       </section>
 
       <section>
-        <Search />
-        {/*<RecipeViewer recipe={testRecipe} />*/}
+          {recipe === null ?
+              <Search /> :
+              <RecipeViewer recipe={recipe} />
+          }
       </section>
     </>
   )
