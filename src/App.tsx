@@ -1,16 +1,11 @@
 import './App.css'
-import type {Recipe} from './types.ts'
 import RecipeViewer from './RecipeViewer.tsx'
 import Search from './search.tsx'
-import {useState} from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-    const [recipe, changeRecipe] = useState<Recipe | null>(null)
-    const handleRecipeClick = (newRecipe: Recipe | null) => {
-        changeRecipe(() => newRecipe)
-    }
   return (
-    <>
+    <BrowserRouter>
       <section>
         <div>
           <h1>Presipes</h1>
@@ -19,14 +14,11 @@ function App() {
           </p>
         </div>
       </section>
-
-      <section>
-          {recipe === null ?
-              <Search onRecipeClick={handleRecipeClick} /> :
-              <RecipeViewer recipe={recipe} />
-          }
-      </section>
-    </>
+        <Routes>
+            <Route path="/" element={<Search />} />
+            <Route path="/recipe/:source/:id" element={<RecipeViewer />} />
+        </Routes>
+    </BrowserRouter>
   )
 }
 

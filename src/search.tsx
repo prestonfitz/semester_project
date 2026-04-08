@@ -2,8 +2,9 @@
 import {apiMealToRecipe, type ApiStatus, type Recipe} from './types.ts'
 import {fetchJsonUnknown} from './api.ts'
 import {isApiResponse} from './typeGuard.ts'
+import {Link} from 'react-router-dom'
 
-function Search({onRecipeClick}: {onRecipeClick: (newRecipe: Recipe | null) => void}) {
+function Search() {
     const featuredSearches = ['fried', 'baked', 'bread', 'cheese', 'noodle','salad', 'chicken', 'pork', 'beef', 'fish']
     // This is a deliberate decision; I want random, unpredictable functionality for this particular render (I think)
     // eslint-disable-next-line react-hooks/purity
@@ -70,7 +71,7 @@ function Search({onRecipeClick}: {onRecipeClick: (newRecipe: Recipe | null) => v
                 }}>
                     Search
                 </button>
-                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} recipeClick={onRecipeClick} /> : ''}
+                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} /> : ''}
                 {apiState.status === 'loading' ?
                     <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
                 {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
@@ -79,20 +80,18 @@ function Search({onRecipeClick}: {onRecipeClick: (newRecipe: Recipe | null) => v
     )
 }
 
-function RecipeList({recipes, recipeClick}: { recipes: Recipe[], recipeClick: (newRecipe: Recipe | null) => void }) {
+function RecipeList({recipes}: { recipes: Recipe[] }) {
     if (recipes.length > 0) {
         return (
             <div>
                 {recipes.map((r) =>
-                    <div key={r.id}>
-                        <p>{r.title}</p>
-                        <p>{r.genre}</p>
-                        <p>{r.category}</p>
-                        <p><button onClick={(e) => {
-                            e.preventDefault()
-                            recipeClick(r)
-                        }}>View Recipe</button></p>
-                    </div>
+                    <Link to={`/recipe/database/${r.id}`}>
+                        <div key={r.id}>
+                            <p>{r.title}</p>
+                            <p>{r.genre}</p>
+                            <p>{r.category}</p>
+                        </div>
+                    </Link>
                 )}
             </div>
         )
