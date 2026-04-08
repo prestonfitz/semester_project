@@ -6,6 +6,9 @@ import {useState} from 'react'
 
 function App() {
     const [recipe, changeRecipe] = useState<Recipe | null>(null)
+    const handleRecipeClick = (newRecipe: Recipe | null) => {
+        changeRecipe(() => newRecipe)
+    }
   return (
     <>
       <section>
@@ -19,7 +22,7 @@ function App() {
 
       <section>
           {recipe === null ?
-              <Search /> :
+              <Search onRecipeClick={handleRecipeClick} /> :
               <RecipeViewer recipe={recipe} />
           }
       </section>

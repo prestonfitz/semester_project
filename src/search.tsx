@@ -3,7 +3,7 @@ import {apiMealToRecipe, type ApiStatus, type Recipe} from './types.ts'
 import {fetchJsonUnknown} from './api.ts'
 import {isApiResponse} from './typeGuard.ts'
 
-function Search() {
+function Search({onRecipeClick}: {onRecipeClick: (newRecipe: Recipe | null) => void}) {
     const featuredSearches = ['fried', 'baked', 'bread', 'cheese', 'noodle','salad', 'chicken', 'pork', 'beef', 'fish']
     // This is a deliberate decision; I want random, unpredictable functionality for this particular render (I think)
     // eslint-disable-next-line react-hooks/purity
@@ -67,9 +67,10 @@ function Search() {
                 <button onClick={(e) => {
                     e.preventDefault();
                     searchUrl()
-                }}>Search</button>
-                {url}
-                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} /> : ''}
+                }}>
+                    Search
+                </button>
+                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} recipeClick={onRecipeClick} /> : ''}
                 {apiState.status === 'loading' ?
                     <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
                 {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
@@ -78,7 +79,7 @@ function Search() {
     )
 }
 
-function RecipeList({recipes}: { recipes: Recipe[] }) {
+function RecipeList({recipes, recipeClick}: { recipes: Recipe[], recipeClick: (newRecipe: Recipe | null) => void }) {
     if (recipes.length > 0) {
         return (
             <div>
@@ -87,6 +88,10 @@ function RecipeList({recipes}: { recipes: Recipe[] }) {
                         <p>{r.title}</p>
                         <p>{r.genre}</p>
                         <p>{r.category}</p>
+                        <p><button onClick={(e) => {
+                            e.preventDefault()
+                            recipeClick(r)
+                        }}>View Recipe</button></p>
                     </div>
                 )}
             </div>
