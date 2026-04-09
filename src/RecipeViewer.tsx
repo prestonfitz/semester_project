@@ -80,6 +80,7 @@ export function RecipeViewer() {
 
             return (
                 <div id={"recipe"}>
+                    <a href={'/'}>Home</a>
                     <h2>{apiState.data[0].title}</h2>
                     <p>{apiState.data[0].genre}</p>
                     <p>{apiState.data[0].category}</p>

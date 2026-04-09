@@ -4,7 +4,7 @@ import {fetchJsonUnknown} from './api.ts'
 import {isApiResponse} from './typeGuard.ts'
 import {Link} from 'react-router-dom'
 
-function Search() {
+function Search({isLocal} : {isLocal: boolean}) {
     const featuredSearches = ['fried', 'baked', 'bread', 'cheese', 'noodle','salad', 'chicken', 'pork', 'beef', 'fish']
     // This is a deliberate decision; I want random, unpredictable functionality for this particular render (I think)
     // eslint-disable-next-line react-hooks/purity
@@ -59,23 +59,42 @@ function Search() {
         }
     },[url])
 
+    const searchForm = () => {
+        return (
+            <>
+                <h2>Find New Recipes</h2>
+                <a href={'/local'}>Personal Recipes</a>
+                <form>
+                    <label htmlFor={"recipeSearch"}>Search Recipes by Key Word</label>
+                    <input id={"recipeSearch"} value={searchDisplay} onChange={(e) => changeSearchDisplay(() => e.target.value)} />
+                    <button onClick={(e) => {
+                        e.preventDefault();
+                        searchUrl()
+                    }}>
+                        Search
+                    </button>
+                    {apiState.status === 'success' ? <RecipeList recipes={apiState.data} /> : ''}
+                    {apiState.status === 'loading' ?
+                        <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
+                    {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
+                </form>
+            </>
+
+        )
+    }
+
+    const personalRecipes = () => {
+        return(
+            <>
+                <h2>Personal Recipes</h2>
+                <a href={'/local/create'}>Create new recipe</a>
+            </>
+        )
+    }
+
     return (
         <>
-            <h2>Find New Recipes</h2>
-            <form>
-                <label htmlFor={"recipeSearch"}>Search Recipes by Key Word</label>
-                <input id={"recipeSearch"} value={searchDisplay} onChange={(e) => changeSearchDisplay(() => e.target.value)} />
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    searchUrl()
-                }}>
-                    Search
-                </button>
-                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} /> : ''}
-                {apiState.status === 'loading' ?
-                    <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
-                {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
-            </form>
+            {isLocal ? personalRecipes() : searchForm()}
         </>
     )
 }
@@ -87,9 +106,13 @@ function RecipeList({recipes}: { recipes: Recipe[] }) {
                 {recipes.map((r) =>
                     <Link to={`/recipe/database/${r.id}`}>
                         <div key={r.id}>
-                            <p>{r.title}</p>
-                            <p>{r.genre}</p>
-                            <p>{r.category}</p>
+                            <h3 style={{marginBottom: 0}}>{r.title}</h3>
+                            <div style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignContent: 'center'}}>
+                                <div style={{textAlign: 'left', width: '6em'}}>Genre:</div>
+                                <div style={{textAlign: 'left', width: '12em'}}>{r.genre}</div>
+                                <div style={{textAlign: 'left', width: '6em'}}>Category:</div>
+                                <div style={{textAlign: 'left', width: '6em'}}>{r.category}</div>
+                            </div>
                         </div>
                     </Link>
                 )}

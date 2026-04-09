@@ -15,8 +15,10 @@ function App() {
         </div>
       </section>
         <Routes>
-            <Route path="/" element={<Search />} />
+            <Route path="/" element={<Search isLocal={false} />} />
+            <Route path="/local" element={<Search isLocal={true} />} />
             <Route path="/recipe/:source/:id" element={<RecipeViewer />} />
+            {/*<Route path="/local/create" element={<RecipeForm />} />*/}
         </Routes>
     </BrowserRouter>
   )
