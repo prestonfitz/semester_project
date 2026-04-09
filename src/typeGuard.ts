@@ -1,4 +1,49 @@
-﻿import type {ApiMeal, ApiResponse} from './types.ts'
+﻿import type {ApiMeal, ApiResponse, Ingredient, Recipe} from './types.ts'
+
+export function isRecipe(t: unknown): t is Recipe {
+    return typeof t === 'object' &&
+        t !== null &&
+        typeof (t as any).id === 'string' &&
+        typeof (t as any).title === 'string' &&
+        typeof (t as any).genre === 'string' &&
+        typeof (t as any).category === 'string' &&
+        typeof (t as any).ingredients === 'object' &&
+        ((t as any).ingredients !== null && typeof (t as any).ingredients.length === 'number' && isIngredientArray((t as any).ingredients)) &&
+        typeof (t as any).instructions === 'object' &&
+        ((t as any).instructions !== null && typeof (t as any).instructions.length === 'number' && isInstructionArray((t as any).instructions))
+}
+
+function isIngredientArray(t: unknown[]): t is Ingredient[] {
+    if (t.length === 0) {
+        return true
+    }
+
+    for (const ingredient of t) {
+        if (typeof ingredient !== 'object'
+            || ingredient === null
+            || typeof (ingredient as any).name !== 'string'
+            || typeof (ingredient as any).measurement !== 'string'
+        ) {
+            return false
+        }
+    }
+
+    return true
+}
+
+function isInstructionArray(t: unknown[]): t is string[] {
+    if (t.length === 0) {
+        return true
+    }
+
+    for (const instruction of t) {
+        if (typeof instruction !== 'string') {
+            return false
+        }
+    }
+
+    return true
+}
 
 // check that the response is a valid response. The meals array may return no results; that is acceptable
 export function isApiResponse(t: unknown): t is ApiResponse {

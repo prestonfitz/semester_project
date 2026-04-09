@@ -87,6 +87,7 @@ function Search({isLocal} : {isLocal: boolean}) {
         return(
             <>
                 <h2>Personal Recipes</h2>
+                <a href={'/'}>Search Recipes</a>
                 <a href={'/local/create'}>Create new recipe</a>
             </>
         )
