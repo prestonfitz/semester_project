@@ -62,14 +62,45 @@ function reducer(prevState: FormState, action: Action): FormState {
             return {...prevState, recipe: {...prevState.recipe, instructions: [...prevState.recipe.instructions, '']}}
         case 'addIngredient':
             return {...prevState, recipe: {...prevState.recipe, ingredients: [...prevState.recipe.ingredients, {name: '', measurement: ''}]}}
+        case 'removeIngredient':
+            return {...prevState, recipe: {...prevState.recipe, ingredients: prevState.recipe.ingredients.filter((_, i) => i !== action.index)}}
+        case 'removeInstruction':
+            return {...prevState, recipe: {...prevState.recipe, instructions: prevState.recipe.instructions.filter((_, i) => i !== action.index)}}
+        case 'reorderIngredient': {
+            if ((action.direction === 'up' && 0 > action.index - 1) || (action.direction === 'down' && prevState.recipe.ingredients.length <= action.index + 1)){
+                return prevState
+            }
+            const reorderedArray = [...prevState.recipe.ingredients]
+            const newIndex = action.direction === 'up' ? action.index - 1 : action.index + 1
+            const temp = reorderedArray[newIndex]
+            reorderedArray[newIndex] = reorderedArray[action.index]
+            reorderedArray[action.index] = temp
+            return {...prevState, recipe: {...prevState.recipe, ingredients: reorderedArray}}
+        }
+        case 'reorderInstruction': {
+            if ((action.direction === 'up' && 0 > action.index - 1) || (action.direction === 'down' && prevState.recipe.instructions.length <= action.index + 1)){
+                return prevState
+            }
+            const reorderedArray = [...prevState.recipe.instructions]
+            const newIndex = action.direction === 'up' ? action.index - 1 : action.index + 1
+            const temp = reorderedArray[newIndex]
+            reorderedArray[newIndex] = reorderedArray[action.index]
+            reorderedArray[action.index] = temp
+            return {...prevState, recipe: {...prevState.recipe, instructions: reorderedArray}}
+        }
         case 'submit':
             if (!prevState.recipe.title.trim()) {
-                alert(JSON.stringify(prevState))
                 return {...prevState, status: 'error', error: 'Hey buddy, you want to put in a title?'}
             }
             localStorage.setItem('1', JSON.stringify(prevState.recipe))
             return {...prevState, status: 'submitted'}
-        default: throw new Error(`That is not a valid form state`)
+        default:
+            {
+                const _exhaustiveCheck: never = action;
+                throw new Error(`That is not a valid form state`);
+                // I don't want to edit the linter config, so this shuts it up
+                console.log(_exhaustiveCheck)
+            }
     }
 }
 
@@ -116,6 +147,14 @@ function RecipeForm() {
                 <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} />
                 <label htmlFor={`measurement${index}`}>Measurement</label>
                 <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'reorderIngredient', index: index, direction: 'up'})
+                }}>Up</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'reorderIngredient', index: index, direction: 'down'})
+                }}>Down</button>
             </li>
         )
     }
@@ -125,6 +164,14 @@ function RecipeForm() {
             <li key={`instruction${index}`}>
                 <label htmlFor={`instruction${index}`}>Instruction</label>
                 <input name={`instruction${index}`} id={`instruction${index}`} value={instruction} onChange={(e) => dispatch({type: 'changeInstruction', value: e.target.value, index: index})} />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'reorderInstruction', index: index, direction: 'up'})
+                }}>Up</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'reorderInstruction', index: index, direction: 'down'})
+                }}>Down</button>
             </li>
         )
     }
