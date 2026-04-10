@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from 'react'
 import {apiMealToRecipe, type ApiStatus, type Recipe} from './types.ts'
 import {fetchJsonUnknown} from './api.ts'
-import {isApiResponse} from './typeGuard.ts'
+import {isApiResponse, isRecipe} from './typeGuard.ts'
 import {Link} from 'react-router-dom'
 
 function Search({isLocal} : {isLocal: boolean}) {
@@ -20,44 +20,77 @@ function Search({isLocal} : {isLocal: boolean}) {
     useEffect(() => {
         let cancelled = false;
         (async () => {
-            changeApiState(() => {
-                return {status: 'loading'}
-            })
-            const response = await fetchJsonUnknown(url)
-            if (cancelled) {
-                return
-            }
-            if (!response.ok) {
+            if (!isLocal) {
                 changeApiState(() => {
-                    return {status: 'error', error: response.error}
+                    return {status: 'loading'}
                 })
-                return
-            }
-            console.log(response)
-            if (isApiResponse(response.data)) {
+                const response = await fetchJsonUnknown(url)
+                if (cancelled) {
+                    return
+                }
+                if (!response.ok) {
+                    changeApiState(() => {
+                        return {status: 'error', error: response.error}
+                    })
+                    return
+                }
+                console.log(response)
+                if (isApiResponse(response.data)) {
+                    const recipes: Recipe[] = []
+                    if (response.data.meals !== null) {
+                        for (const meal of response.data.meals) {
+                            recipes.push(apiMealToRecipe(meal))
+                        }
+                    }
+                    changeApiState(() => {
+                        return {status: 'success', data: recipes}
+                    })
+                    return
+                } else {
+                    changeApiState(() => {
+                        return {
+                            status: 'error',
+                            error: {type: 'parse', message: 'Search returned no data or malformed data'}
+                        }
+                    })
+                    return
+                }
+            } else {
                 const recipes: Recipe[] = []
-                if (response.data.meals !== null) {
-                    for (const meal of response.data.meals) {
-                        recipes.push(apiMealToRecipe(meal))
+                const keys = Object.keys(localStorage)
+
+                for (const key of keys) {
+                    if (cancelled) {
+                        return
+                    }
+
+                    const rawItem = localStorage.getItem(key)
+
+                    if (rawItem === null) {
+                        continue
+                    }
+
+                    try {
+                        const jsonItem: unknown = JSON.parse(rawItem)
+
+                        if (isRecipe(jsonItem)) {
+                            recipes.push(jsonItem)
+                        }
+                    } catch {
+                        // If this errors, we assume that the object was for something else and move on
                     }
                 }
+
                 changeApiState(() => {
                     return {status: 'success', data: recipes}
                 })
-                return
-            } else {
-                changeApiState(() => {
-                    console.log(response)
-                    return {status: 'error', error: {type: 'parse', message: 'Search returned no data or malformed data'}}
-                })
-                return
             }
         })();
 
         return () => {
             cancelled = true
         }
-    },[url])
+    },[url, isLocal])
 
     const searchForm = () => {
         return (
@@ -73,7 +106,7 @@ function Search({isLocal} : {isLocal: boolean}) {
                     }}>
                         Search
                     </button>
-                    {apiState.status === 'success' ? <RecipeList recipes={apiState.data} /> : ''}
+                    {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'database'} /> : ''}
                     {apiState.status === 'loading' ?
                         <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
                     {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
@@ -89,6 +122,10 @@ function Search({isLocal} : {isLocal: boolean}) {
                 <h2>Personal Recipes</h2>
                 <a href={'/'}>Search Recipes</a>
                 <a href={'/local/create'}>Create new recipe</a>
+                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'local'} /> : ''}
+                {apiState.status === 'loading' ?
+                    <p>Retrieving recipes, please hold <span className="loader"></span></p> : ''}
+                {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
             </>
         )
     }
@@ -100,12 +137,12 @@ function Search({isLocal} : {isLocal: boolean}) {
     )
 }
 
-function RecipeList({recipes}: { recipes: Recipe[] }) {
+function RecipeList({recipes, source}: { recipes: Recipe[], source: string }) {
     if (recipes.length > 0) {
         return (
             <div>
                 {recipes.map((r) =>
-                    <Link to={`/recipe/database/${r.id}`}>
+                    <Link to={`/recipe/${source}/${r.id}`}>
                         <div key={r.id}>
                             <h3 style={{marginBottom: 0}}>{r.title}</h3>
                             <div style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignContent: 'center'}}>

@@ -2,7 +2,7 @@
 import {useParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import {fetchJsonUnknown} from './api.ts'
-import {isApiResponse} from './typeGuard.ts'
+import {isApiResponse, isRecipe} from './typeGuard.ts'
 
 export function RecipeViewer() {
     const {source, id} = useParams()
@@ -12,9 +12,6 @@ export function RecipeViewer() {
     useEffect(() => {
         let cancelled = false;
             (async () => {
-                // console.log(source)
-                // console.log(id)
-                // console.log(baseUrl+id)
                 if (source === 'database') {
                     changeApiState(() => {
                         return {status: 'loading'}
@@ -43,8 +40,45 @@ export function RecipeViewer() {
                         return
                     } else {
                         changeApiState(() => {
-                            console.log(response)
                             return {status: 'error', error: {type: 'parse', message: 'Search returned no data or malformed data'}}
+                        })
+                        return
+                    }
+                } else if (source === 'local') {
+                    if (id === undefined) {
+                        changeApiState(() => {
+                            return {status: 'error', error: {type: 'http', status: 404, statusText: 'No ID given to search'}}
+                        })
+                        return
+                    }
+                    const rawItem = localStorage.getItem(id)
+
+                    if (rawItem === null) {
+                        changeApiState(() => {
+                            return {
+                                status: 'error',
+                                error: {type: 'network', message: 'Unable to find recipe with given id'}
+                            }
+                        })
+                        return
+                    }
+
+                    try {
+                        const jsonItem: unknown = JSON.parse(rawItem)
+
+                        if (isRecipe(jsonItem)) {
+                            changeApiState(() => {
+                                return {status: 'success', data: [jsonItem]}
+                            })
+                            return
+                        }
+                        changeApiState(() => {
+                            return {status: 'error', error: {type: 'parse', message: 'Item is not a recipe'}}
+                        })
+                        return
+                    } catch {
+                        changeApiState(() => {
+                            return {status: 'error', error: {type: 'parse', message: 'Item is not valid JSON'}}
                         })
                         return
                     }
@@ -58,7 +92,7 @@ export function RecipeViewer() {
         return () => {
             cancelled = true
         }
-    },[])
+    },[id, source])
 
     switch (apiState.status){
         case 'error':
@@ -80,7 +114,8 @@ export function RecipeViewer() {
 
             return (
                 <div id={"recipe"}>
-                    <a href={'/'}>Home</a>
+                    <a href={source === 'local' ? '/local' : '/'}>Home</a>
+                    {source === 'local' ? <a href={`/local/edit/${apiState.data[0].id}`}>Edit</a> : ''}
                     <h2>{apiState.data[0].title}</h2>
                     <p>{apiState.data[0].genre}</p>
                     <p>{apiState.data[0].category}</p>
