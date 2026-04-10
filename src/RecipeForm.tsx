@@ -1,7 +1,7 @@
 ﻿import type {Ingredient, Recipe} from './types.ts'
-import {useReducer} from 'react'
+import {useEffect, useReducer} from 'react'
 import {isRecipe} from './typeGuard.ts'
-import {useParams} from 'react-router-dom'
+import {redirect, useNavigate, useParams} from 'react-router-dom'
 
 type Action =
     | { type: 'changeTitle', value: string }
@@ -142,6 +142,15 @@ function RecipeForm() {
 
 
     const [state, dispatch] = useReducer(reducer, setInitialState())
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (state.status === 'submitted'){
+            navigate(`/recipe/local/${state.recipe.id}`)
+        }
+    }, [state, navigate])
+
     const ingredientsInput = (ingredient: Ingredient, index: number) => {
         return (
             <li key={`ingredient${index}`}>
@@ -157,6 +166,10 @@ function RecipeForm() {
                     e.preventDefault();
                     dispatch({type: 'reorderIngredient', index: index, direction: 'down'})
                 }}>Down</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'removeIngredient', index: index})
+                }}>Delete</button>
             </li>
         )
     }
@@ -174,6 +187,10 @@ function RecipeForm() {
                     e.preventDefault();
                     dispatch({type: 'reorderInstruction', index: index, direction: 'down'})
                 }}>Down</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({type: 'removeInstruction', index: index})
+                }}>Delete</button>
             </li>
         )
     }

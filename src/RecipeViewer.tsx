@@ -130,8 +130,9 @@ export function RecipeViewer() {
                             ))}
                         </tbody>
                     </table>
-
-                    {apiState.data[0].instructions.map((i, index) => <p key={`instruction${index}`}>{i}</p>)}
+                    <ul className={'list-inline'}>
+                        {apiState.data[0].instructions.map((i, index) => <li className={'list-inline-item'} key={`instruction${index}`}>{i}</li>)}
+                    </ul>
                 </div>
             )
         case 'idle':
