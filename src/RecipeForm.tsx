@@ -11,7 +11,8 @@ type Action =
     | { type: 'addInstruction' }
     | { type: 'removeInstruction', index: number }
     | { type: 'reorderInstruction', index: number, direction: 'up' | 'down'}
-    | { type: 'changeIngredient', value: Ingredient, index: number }
+    | { type: 'changeIngredient', value: string, index: number }
+    | { type: 'changeMeasurement', value: string, index: number }
     | { type: 'addIngredient' }
     | { type: 'removeIngredient', index: number }
     | { type: 'reorderIngredient', index: number, direction: 'up' | 'down'}
@@ -27,9 +28,40 @@ function reducer(prevState: FormState, action: Action): FormState {
         case 'changeTitle': return { ...prevState, recipe: {...prevState.recipe, title: action.value}}
         case 'changeCategory': return { ...prevState, recipe: {...prevState.recipe, category: action.value}}
         case 'changeGenre': return { ...prevState, recipe: {...prevState.recipe, genre: action.value}}
-        case 'changeInstruction':
-            prevState.recipe.instructions[action.index] = action.value
-            return { ...prevState, recipe: {...prevState.recipe, instructions: prevState.recipe.instructions}}
+        case 'changeInstruction': {
+            const newInstruction: string[] = prevState.recipe.instructions.map((inst, ind) => {
+                if (ind === action.index) {
+                    return action.value
+                } else {
+                    return inst
+                }
+            })
+            return {...prevState, recipe: {...prevState.recipe, instructions: newInstruction}}
+        }
+        case 'changeMeasurement': {
+            const newMeasure: Ingredient[] = prevState.recipe.ingredients.map((m, i) => {
+                if (i === action.index) {
+                    return {...m, measurement: action.value}
+                } else {
+                    return m
+                }
+            })
+            return { ...prevState, recipe: {...prevState.recipe, ingredients: newMeasure}}
+        }
+        case 'changeIngredient': {
+            const newIngredient: Ingredient[] = prevState.recipe.ingredients.map((ing, ind) => {
+                if (ind === action.index) {
+                    return {...ing, name: action.value}
+                } else {
+                    return ing
+                }
+            })
+            return {...prevState, recipe: {...prevState.recipe, ingredients: newIngredient}}
+        }
+        case 'addInstruction':
+            return {...prevState, recipe: {...prevState.recipe, instructions: [...prevState.recipe.instructions, '']}}
+        case 'addIngredient':
+            return {...prevState, recipe: {...prevState.recipe, ingredients: [...prevState.recipe.ingredients, {name: '', measurement: ''}]}}
         case 'submit':
             if (!prevState.recipe.title.trim()) {
                 alert(JSON.stringify(prevState))
@@ -77,28 +109,24 @@ function RecipeForm() {
 
 
     const [state, dispatch] = useReducer(reducer, setInitialState())
-    const ingredientsInput = (ingredient: Ingredient) => {
+    const ingredientsInput = (ingredient: Ingredient, index: number) => {
         return (
-            <li>
-                <label htmlFor={'ingredient'}>Ingredient</label>
-                <input name={'ingredient'} id={'ingredient'} value={ingredient.name} />
-                <label htmlFor={'measurement'}>Measurement</label>
-                <input name={'measurement'} id={'measurement'} value={ingredient.measurement} />
+            <li key={`ingredient${index}`}>
+                <label htmlFor={`ingredient${index}`}>Ingredient</label>
+                <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} />
+                <label htmlFor={`measurement${index}`}>Measurement</label>
+                <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
             </li>
         )
     }
 
-    function instructionsInput() {
+    function instructionsInput(instruction: string, index: number) {
         return (
-            <li>
-                <label htmlFor={'instruction'}>Instruction</label>
-                <input name={'instruction'} id={'instruction'} />
+            <li key={`instruction${index}`}>
+                <label htmlFor={`instruction${index}`}>Instruction</label>
+                <input name={`instruction${index}`} id={`instruction${index}`} value={instruction} onChange={(e) => dispatch({type: 'changeInstruction', value: e.target.value, index: index})} />
             </li>
         )
-    }
-
-    const changeVal = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, action: Action['type']) => {
-        dispatch({type: action, value: e.target.value})
     }
 
     return (
@@ -108,20 +136,33 @@ function RecipeForm() {
             </h2>
             <form>
                 <label htmlFor={'title'} >Title</label>
-                <input name={'title'} id={'title'} value={state.recipe.title} onChange={(e) => changeVal(e, 'changeTitle')} />
+                <input name={'title'} id={'title'} value={state.recipe.title} onChange={(e) => dispatch({type: 'changeTitle', value: e.target.value})} />
                 <label htmlFor={'genre'}>Genre</label>
-                <input name={'genre'} id={'genre'} value={state.recipe.genre} onChange={(e) => changeVal(e, 'changeGenre')} />
+                <input name={'genre'} id={'genre'} value={state.recipe.genre} onChange={(e) => dispatch({type: 'changeGenre', value: e.target.value})} />
                 <label htmlFor={'category'}>Category</label>
-                <input name={'category'} id={'category'} value={state.recipe.category} onChange={(e) => changeVal(e, 'changeCategory')} />
+                <input name={'category'} id={'category'} value={state.recipe.category} onChange={(e) => dispatch({type: 'changeCategory', value: e.target.value})} />
                 {state.recipe.ingredients.length > 0 ?
                     <ul>
                         {/*consider switching to a function*/}
-                        {ingredientsInput(state.recipe.ingredients[0])}
+                        {state.recipe.ingredients.map((i, index) => {
+                                return ingredientsInput(i, index)
+                            })
+                        }
                     </ul>
                     : ''}
+                <button onClick={ (e) => {
+                    e.preventDefault();
+                    dispatch({type: 'addIngredient'})
+                }}>Add ingredient</button>
                 <ol>
-                    {instructionsInput()}
+                    {state.recipe.instructions.map((i, index) => {
+                        return instructionsInput(i, index)
+                    })}
                 </ol>
+                <button onClick={ (e) => {
+                    e.preventDefault();
+                    dispatch({type: 'addInstruction'})
+                }}>Add instruction</button>
             </form>
             <a href={'/local'}>Cancel</a>
             <button onClick={(e) => {
