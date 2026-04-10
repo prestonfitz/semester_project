@@ -92,7 +92,7 @@ function reducer(prevState: FormState, action: Action): FormState {
             if (!prevState.recipe.title.trim()) {
                 return {...prevState, status: 'error', error: 'Hey buddy, you want to put in a title?'}
             }
-            localStorage.setItem('1', JSON.stringify(prevState.recipe))
+            localStorage.setItem(prevState.recipe.id, JSON.stringify(prevState.recipe))
             return {...prevState, status: 'submitted'}
         default:
             {
@@ -108,7 +108,9 @@ function RecipeForm() {
     const {id} = useParams()
     const setInitialState = (): FormState => {
         const initialState: Recipe = {
-            id: '',
+            // Another instance where I want randomness
+            // eslint-disable-next-line react-hooks/purity
+            id: `${Date.now() + Math.random()}`,
             title: '',
             category: '',
             genre: '',
