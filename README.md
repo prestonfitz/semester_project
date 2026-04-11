@@ -29,3 +29,18 @@ view or make a search. The search queries by recipe title. When a recipe is sele
 recipe is queried again, but this time by ID. I chose to do it this way rather than pass the
 recipe object itself so that URLs would consistently lead to the same place as long as you
 know the ID for the recipe.
+
+## AI Usage
+AI was used minimally. My AI of choice was Codex. Prompts and responses were as follows:
+```
+Me: The current UI issues are mostly structural: sparse layout, inline styles, and ungrouped controls. I’m checking what styles.css already provides so I can restyle by reusing
+  existing classes instead of inventing a competing layer in App.css.
+  
+Codex: The restyle stays on top of the existing styles.css utility layer and fixes the structural issues without touching component code: the app now has a centered content shell, card-
+  like grouping for sections, consistent button/link/input treatment, stronger recipe list cards, better form spacing for ingredient/instruction controls, and mobile-safe layout
+  rules. I also added a few targeted overrides to neutralize the current inline spacing/color styles where they were blocking a cohesive layout.
+
+  Verification: npm run build passed. There was already an unrelated README.md modification in the worktree.
+  
+Me: 
+```
