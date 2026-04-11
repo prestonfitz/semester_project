@@ -1,73 +1,31 @@
-# React + TypeScript + Vite
+# Presipes
+Preston's Recipes: a Recipe app by Preston Fitzgerald for the final project for IS 542
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Preject description and explaination for grading
+Presipes  aims to be a place to search new recipes and store you own recipes. Searches
+are made using themealdb.com, and personal recipes are stored in the browser's local
+storage. 
 
-Currently, two official plugins are available:
+The app was created using Vite/React in TypeScript. Routing was handled using react-router-dom.
+The set up for the routing can be found in [App.tsx](./src/App.tsx).For the best examples of 
+state usage, I recommend viewing [RecipeForm.tsx](./src/RecipeForm.tsx). For the most comprehensive
+example of API usage, I recommend [search.tsx](./src/search.tsx), where you will find a use effect
+that calls the API and narrows the type effectively. For the most comprehensive use of local storage,
+I recommend [RecipeForm.tsx](./src/RecipeForm.tsx), where you will find both reading and writing to
+local storage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Viewing the site
+Hosted on GitHub Pages:
 
-## React Compiler
+https://prestonfitz.github.io/semester_project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+To run locally, simply run `npm run dev` from the root folder.
 
-## Expanding the ESLint configuration
+## API Usage
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Recipes are searched using themealdb.com. When the home page is rendered, it makes a random
+search for a set of recipes to show the user. The user can then either select a recipe to
+view or make a search. The search queries by recipe title. When a recipe is selected, the
+recipe is queried again, but this time by ID. I chose to do it this way rather than pass the
+recipe object itself so that URLs would consistently lead to the same place as long as you
+know the ID for the recipe.
