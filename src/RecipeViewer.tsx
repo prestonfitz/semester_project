@@ -1,5 +1,5 @@
 ﻿import {apiMealToRecipe, type ApiStatus, type Recipe} from './types.ts'
-import {useParams} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import {fetchJsonUnknown} from './api.ts'
 import {isApiResponse, isRecipe} from './typeGuard.ts'
@@ -114,8 +114,8 @@ export function RecipeViewer() {
 
             return (
                 <div id={"recipe"}>
-                    <a href={source === 'local' ? '/local' : '/'}>Home</a>
-                    {source === 'local' ? <a href={`/local/edit/${apiState.data[0].id}`}>Edit</a> : ''}
+                    <Link to={source === 'local' ? '/local' : '/'}>Home</Link>
+                    {source === 'local' ? <Link to={`/local/edit/${apiState.data[0].id}`}>Edit</Link> : ''}
                     <h2>{apiState.data[0].title}</h2>
                     <p>{apiState.data[0].genre}</p>
                     <p>{apiState.data[0].category}</p>

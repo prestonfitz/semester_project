@@ -1,7 +1,7 @@
 ﻿import type {Ingredient, Recipe} from './types.ts'
 import {useEffect, useReducer} from 'react'
 import {isRecipe} from './typeGuard.ts'
-import {redirect, useNavigate, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 
 type Action =
     | { type: 'changeTitle', value: string }
@@ -230,12 +230,11 @@ function RecipeForm() {
                     dispatch({type: 'addInstruction'})
                 }}>Add instruction</button>
             </form>
-            <a href={'/local'}>Cancel</a>
+            <Link to={'/local'}>Cancel</Link>
             <button onClick={(e) => {
                 e.preventDefault();
                 dispatch({type: 'submit'})
             }}>Submit</button>
-            <p>{state.status}</p>
             <p style={{color: 'red'}}>{state.status === 'error' ? state.error : ''}</p>
         </>
     )

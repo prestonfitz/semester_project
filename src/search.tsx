@@ -96,7 +96,7 @@ function Search({isLocal} : {isLocal: boolean}) {
         return (
             <>
                 <h2>Find New Recipes</h2>
-                <a href={'/local'}>Personal Recipes</a>
+                <Link to={'/local'}>Personal Recipes</Link>
                 <form>
                     <label htmlFor={"recipeSearch"}>Search Recipes by Key Word</label>
                     <input id={"recipeSearch"} value={searchDisplay} onChange={(e) => changeSearchDisplay(() => e.target.value)} />
@@ -120,8 +120,8 @@ function Search({isLocal} : {isLocal: boolean}) {
         return(
             <>
                 <h2>Personal Recipes</h2>
-                <a href={'/'}>Search Recipes</a>
-                <a href={'/local/create'}>Create new recipe</a>
+                <Link to={'/'}>Search Recipes</Link>
+                <Link to={'/local/create'}>Create new recipe</Link>
                 {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'local'} /> : ''}
                 {apiState.status === 'loading' ?
                     <p>Retrieving recipes, please hold <span className="loader"></span></p> : ''}

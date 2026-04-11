@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/semester_project">
       <section>
         <div>
           <h1>Presipes</h1>

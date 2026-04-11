@@ -141,18 +141,3 @@ export type ApiMeal = {
     strMeasure19: string | null
     strMeasure20: string | null
 }
-
-// This is the state that is handled for adding or retrieving recipes with a database
-// The RetrieveState will be owned by the home page (where it would be retrieved), but the submit state
-// will be owned on the form page
-
-// This handles the submitting of a recipe. It has no success state because the result will be a redirect to a display
-type DatabaseSubmitState =
-    | {status: 'editing', recipe: Recipe}
-    | {status: 'submitting', recipe: Recipe}
-    | {status: 'error', recipe: Recipe, message: string}
-
-type DatabaseRetrieveState =
-    | {status: 'retrieving', id: string}
-    | {status: 'error', message: string}
-    | {status: 'success', recipe: Recipe}
