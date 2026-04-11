@@ -1,27 +1,7 @@
-﻿import type {Ingredient, Recipe} from './types.ts'
+﻿import type {Action, FormState, Ingredient, Recipe} from '../types/types.ts'
 import {useEffect, useReducer} from 'react'
-import {isRecipe} from './typeGuard.ts'
+import {isRecipe} from '../types/typeGuard.ts'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-
-type Action =
-    | { type: 'changeTitle', value: string }
-    | { type: 'changeGenre', value: string }
-    | { type: 'changeCategory', value: string }
-    | { type: 'changeInstruction', value: string, index: number }
-    | { type: 'addInstruction' }
-    | { type: 'removeInstruction', index: number }
-    | { type: 'reorderInstruction', index: number, direction: 'up' | 'down'}
-    | { type: 'changeIngredient', value: string, index: number }
-    | { type: 'changeMeasurement', value: string, index: number }
-    | { type: 'addIngredient' }
-    | { type: 'removeIngredient', index: number }
-    | { type: 'reorderIngredient', index: number, direction: 'up' | 'down'}
-    | { type: 'submit'}
-
-type FormState =
-    | { status: 'editing', recipe: Recipe }
-    | { status: 'error', recipe: Recipe, error: string }
-    | { status: 'submitted', recipe: Recipe }
 
 function reducer(prevState: FormState, action: Action): FormState {
     switch (action.type) {

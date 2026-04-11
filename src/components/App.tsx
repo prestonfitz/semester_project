@@ -1,6 +1,6 @@
-import './App.css'
+import '../styling/App.css'
 import RecipeViewer from './RecipeViewer.tsx'
-import Search from './search.tsx'
+import Search from './Search.tsx'
 import RecipeForm from './RecipeForm.tsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 

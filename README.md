@@ -7,11 +7,11 @@ are made using themealdb.com, and personal recipes are stored in the browser's l
 storage. 
 
 The app was created using Vite/React in TypeScript. Routing was handled using react-router-dom.
-The set up for the routing can be found in [App.tsx](./src/App.tsx).For the best examples of 
-state usage, I recommend viewing [RecipeForm.tsx](./src/RecipeForm.tsx). For the most comprehensive
-example of API usage, I recommend [search.tsx](./src/search.tsx), where you will find a use effect
+The set up for the routing can be found in [App.tsx](src/components/App.tsx).For the best examples of 
+state usage, I recommend viewing [RecipeForm.tsx](src/components/RecipeForm.tsx). For the most comprehensive
+example of API usage, I recommend [Search.tsx](src/components/Search.tsx), where you will find a use effect
 that calls the API and narrows the type effectively. For the most comprehensive use of local storage,
-I recommend [RecipeForm.tsx](./src/RecipeForm.tsx), where you will find both reading and writing to
+I recommend [RecipeForm.tsx](src/components/RecipeForm.tsx), where you will find both reading and writing to
 local storage.
 
 ## Viewing the site

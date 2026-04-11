@@ -1,4 +1,4 @@
-﻿import type {Result} from './types.ts'
+﻿import type {Result} from '../types/types.ts'
 
 export async function fetchJsonUnknown(url: string): Promise<Result<unknown>> {
     try {

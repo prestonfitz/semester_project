@@ -141,3 +141,23 @@ export type ApiMeal = {
     strMeasure19: string | null
     strMeasure20: string | null
 }
+
+export type Action =
+    | { type: 'changeTitle', value: string }
+    | { type: 'changeGenre', value: string }
+    | { type: 'changeCategory', value: string }
+    | { type: 'changeInstruction', value: string, index: number }
+    | { type: 'addInstruction' }
+    | { type: 'removeInstruction', index: number }
+    | { type: 'reorderInstruction', index: number, direction: 'up' | 'down' }
+    | { type: 'changeIngredient', value: string, index: number }
+    | { type: 'changeMeasurement', value: string, index: number }
+    | { type: 'addIngredient' }
+    | { type: 'removeIngredient', index: number }
+    | { type: 'reorderIngredient', index: number, direction: 'up' | 'down' }
+    | { type: 'submit' }
+
+export type FormState =
+    | { status: 'editing', recipe: Recipe }
+    | { status: 'error', recipe: Recipe, error: string }
+    | { status: 'submitted', recipe: Recipe }

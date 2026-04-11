@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from 'react'
-import {apiMealToRecipe, type ApiStatus, type Recipe} from './types.ts'
-import {fetchJsonUnknown} from './api.ts'
-import {isApiResponse, isRecipe} from './typeGuard.ts'
+import {apiMealToRecipe, type ApiStatus, type Recipe} from '../types/types.ts'
+import {fetchJsonUnknown} from '../api/api.ts'
+import {isApiResponse, isRecipe} from '../types/typeGuard.ts'
 import {Link} from 'react-router-dom'
 
 function Search({isLocal} : {isLocal: boolean}) {
