@@ -199,6 +199,7 @@ function RecipeForm() {
                 <br />
                 <label htmlFor={'category'}>Category</label>
                 <input name={'category'} id={'category'} className={'input-space-after'} value={state.recipe.category} onChange={(e) => dispatch({type: 'changeCategory', value: e.target.value})} />
+                <h3>Ingredients</h3>
                 {state.recipe.ingredients.length > 0 ?
                     <ul>
                         {/*consider switching to a function*/}
@@ -212,6 +213,7 @@ function RecipeForm() {
                     e.preventDefault();
                     dispatch({type: 'addIngredient'})
                 }}>Add ingredient</button>
+                <h3>Instructions</h3>
                 <ol>
                     {state.recipe.instructions.map((i, index) => {
                         return instructionsInput(i, index)

@@ -60,4 +60,32 @@ Codex: Adjusted [RecipeForm.tsx](C:\Users\prest\Documents\College\MISM Semester 
 
   Updated [App.css](C:\Users\prest\Documents\College\MISM Semester 4\IS 542\semester_project\src\styling\App.css) to support that layout and to style textarea the same way as the
   existing form controls. npm run build passed.
+  
+Me: Can you generate images?
+
+Codex: Yes. I can generate or edit images.
+
+  In this workspace, that usually means I can help with:
+
+  - new UI mockups or concept art
+  - icons, banners, textures, sprites, and illustrations
+  - editing an existing image if you give me the file
+  - creating assets and then wiring them into the app
+
+  If you want, tell me:
+
+  - what image you want
+  - size/aspect ratio
+  - style
+  - where to save it in the project
+
+  If it’s for this app, I can also place the generated asset into the repo and update the code to use it.
+  
+Me: I would like a new favicon. I would like a cartoon penguin in a chef's hat.
+
+Codex: Replaced [public/favicon.svg](C:\Users\prest\Documents\College\MISM Semester 4\IS 542\semester_project\public\favicon.svg) with a new favicon: a simple cartoon penguin in a
+  chef’s hat, drawn as SVG so it stays sharp at favicon sizes. index.html already points to /favicon.svg, so no additional wiring was needed.
+
+  I couldn’t use the image generation skill’s built-in image tool because it isn’t available in this session, so I created the favicon directly as vector artwork instead, which is
+  the better fit for this asset. Verification: npm run build passed.
 ```
