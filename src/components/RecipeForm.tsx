@@ -135,13 +135,17 @@ function RecipeForm() {
         return (
             <li key={`ingredient${index}`} style={{listStyleType: 'none'}}>
                 <div className={'ingredient-input-grid'}>
-                    <div style={{gridColumnStart: 1}}>
-                        <label htmlFor={`ingredient${index}`}>Ingredient</label>
-                        <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} /><br />
-                        <label htmlFor={`measurement${index}`}>Measurement</label>
-                        <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
+                    <div className={'ingredient-input-row'}>
+                        <div className={'ingredient-input-field'}>
+                            <label htmlFor={`ingredient${index}`}>Ingredient</label>
+                            <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} />
+                        </div>
+                        <div className={'ingredient-input-field'}>
+                            <label htmlFor={`measurement${index}`}>Measurement</label>
+                            <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
+                        </div>
                     </div>
-                    <div style={{gridColumnStart: 2}}>
+                    <div className={'ingredient-button-row'}>
                         <button onClick={(e) => {
                             e.preventDefault();
                             dispatch({type: 'reorderIngredient', index: index, direction: 'up'})
@@ -164,7 +168,7 @@ function RecipeForm() {
         return (
             <li key={`instruction${index}`}>
                 <label htmlFor={`instruction${index}`}>Instruction</label>
-                <input name={`instruction${index}`} id={`instruction${index}`} value={instruction} onChange={(e) => dispatch({type: 'changeInstruction', value: e.target.value, index: index})} />
+                <textarea name={`instruction${index}`} id={`instruction${index}`} value={instruction} onChange={(e) => dispatch({type: 'changeInstruction', value: e.target.value, index: index})} />
                 <button onClick={(e) => {
                     e.preventDefault();
                     dispatch({type: 'reorderInstruction', index: index, direction: 'up'})
@@ -218,7 +222,7 @@ function RecipeForm() {
                     dispatch({type: 'addInstruction'})
                 }}>Add instruction</button>
             </form>
-            <Link to={'/local'}>Cancel</Link>
+            <Link className={'link'} to={'/local'}>Cancel</Link>
             <button onClick={(e) => {
                 e.preventDefault();
                 dispatch({type: 'submit'})

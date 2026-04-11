@@ -42,5 +42,22 @@ Codex: The restyle stays on top of the existing styles.css utility layer and fix
 
   Verification: npm run build passed. There was already an unrelated README.md modification in the worktree.
   
-Me: 
+Me: That is good, but perhaps a bit much for me. Can we do a bit simpler of a styling and focus on using primarily the styles found in src\styling\styles.css?
+
+Codex: Yes. I simplified [App.css](C:\Users\prest\Documents\College\MISM Semester 4\IS 542\semester_project\src\styling\App.css) so it leans much more on the Bootstrap-style tokens and
+  defaults already present in src/styling/styles.css.
+
+  The app layer now just handles a few essentials: page container spacing, a basic white content card, simple pill links/buttons, cleaner inputs, modest recipe list borders, and
+  responsive stacking for the ingredient controls. The heavier custom shadows, gradients, and more opinionated card treatments are gone.
+  
+Me: You will need to reindex it because I made some changes, but please take a look at src\components\RecipeForm.tsx. The buttons for the ingredient inputs need work. If we could
+    have the input boxes on the same line with the buttons below, similar to the instructions input, that would be appreciated. In addition, let's change the input boxes for the
+  instructions to be text areas instead. Feel free to change the .tsx to make that change. Changes to the .tsx should be as minimal as possible.
+  
+Codex: Adjusted [RecipeForm.tsx](C:\Users\prest\Documents\College\MISM Semester 4\IS 542\semester_project\src\components\RecipeForm.tsx) with minimal markup changes: ingredient rows now
+  use a small wrapper structure so the Ingredient and Measurement inputs can sit on the same line and the action buttons sit below them, and the instruction field is now a textarea
+  instead of an input.
+
+  Updated [App.css](C:\Users\prest\Documents\College\MISM Semester 4\IS 542\semester_project\src\styling\App.css) to support that layout and to style textarea the same way as the
+  existing form controls. npm run build passed.
 ```
