@@ -114,25 +114,37 @@ export function RecipeViewer() {
 
             return (
                 <div id={"recipe"}>
-                    <Link to={source === 'local' ? '/local' : '/'}>Home</Link>
-                    {source === 'local' ? <Link to={`/local/edit/${apiState.data[0].id}`}>Edit</Link> : ''}
+                    <Link to={source === 'local' ? '/local' : '/'} className={'link'}>Home</Link>
+                    {source === 'local' ? <Link className={'link'} to={`/local/edit/${apiState.data[0].id}`}>Edit</Link> : ''}
                     <h2>{apiState.data[0].title}</h2>
-                    <p>{apiState.data[0].genre}</p>
+                    <p style={{marginBottom: 0}}>{apiState.data[0].genre}</p>
                     <p>{apiState.data[0].category}</p>
 
-                    <table>
-                        <tbody>
-                            {apiState.data[0].ingredients.map((i, index) => (
-                                <tr key={`ingredient${index}`}>
-                                    <td>{i.name}</td>
-                                    <td>{i.measurement}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <ul className={'list-inline'}>
-                        {apiState.data[0].instructions.map((i, index) => <li className={'list-inline-item'} key={`instruction${index}`}>{i}</li>)}
-                    </ul>
+                    {apiState.data[0].ingredients.length > 0 ?
+                        <div id={'ingredients'}>
+                            <h4>Ingredients</h4>
+                            <table className={'table'}>
+                                <tbody>
+                                {apiState.data[0].ingredients.map((i, index) => (
+                                    <tr key={`ingredient${index}`}>
+                                        <td>{i.name}</td>
+                                        <td>{i.measurement}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        : ''}
+
+                    {apiState.data[0].instructions.length > 0 ?
+                        <div id={'instructions'}>
+                            <h4>Instructions</h4>
+                            <ul className={'list-unstyled'}>
+                                {apiState.data[0].instructions.map((i, index) => <li style={{marginBottom: 8}} key={`instruction${index}`}>{i}</li>)}
+                            </ul>
+                        </div>
+                        : ''}
+
                 </div>
             )
         case 'idle':

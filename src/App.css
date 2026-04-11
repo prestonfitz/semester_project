@@ -19,4 +19,65 @@
   }
 }
 
+header {
+  text-align: center;
+  background: #1b2bdb;
+  color: white;
+}
 
+.content {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  padding: 0px 25px;
+}
+
+.link {
+  text-decoration: none;
+  border: 1px solid #1b2bdb;
+  color: #1b2bdb;
+  padding: 4px;
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.link:hover {
+  background-color: #dddddd;
+}
+
+.recipeListItem {
+  color: #212529;
+}
+
+.search-form {
+  padding: 20px;
+}
+
+button {
+  background-color: white;
+  margin: 4px;
+  border-radius: 10px;
+}
+
+input {
+  border-radius: 10px;
+  margin-left: 4px;
+  break-after: auto;
+}
+
+.input-space-after {
+  margin-bottom: 16px;
+}
+
+.ingredient-input-grid {
+  display: grid;
+  grid-template-columns: 65% 35%;
+}
+
+.instruction-input-grid {
+
+}

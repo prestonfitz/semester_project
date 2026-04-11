@@ -153,23 +153,29 @@ function RecipeForm() {
 
     const ingredientsInput = (ingredient: Ingredient, index: number) => {
         return (
-            <li key={`ingredient${index}`}>
-                <label htmlFor={`ingredient${index}`}>Ingredient</label>
-                <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} />
-                <label htmlFor={`measurement${index}`}>Measurement</label>
-                <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    dispatch({type: 'reorderIngredient', index: index, direction: 'up'})
-                }}>Up</button>
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    dispatch({type: 'reorderIngredient', index: index, direction: 'down'})
-                }}>Down</button>
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    dispatch({type: 'removeIngredient', index: index})
-                }}>Delete</button>
+            <li key={`ingredient${index}`} style={{listStyleType: 'none'}}>
+                <div className={'ingredient-input-grid'}>
+                    <div style={{gridColumnStart: 1}}>
+                        <label htmlFor={`ingredient${index}`}>Ingredient</label>
+                        <input name={`ingredient${index}`} id={`ingredient${index}`} value={ingredient.name} onChange={(e) => dispatch({type: 'changeIngredient', value: e.target.value, index: index})} /><br />
+                        <label htmlFor={`measurement${index}`}>Measurement</label>
+                        <input name={`measurement${index}`} id={`measurement${index}`} value={ingredient.measurement} onChange={(e) => dispatch({type: 'changeMeasurement', value: e.target.value, index: index})} />
+                    </div>
+                    <div style={{gridColumnStart: 2}}>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            dispatch({type: 'reorderIngredient', index: index, direction: 'up'})
+                        }}>Up</button>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            dispatch({type: 'reorderIngredient', index: index, direction: 'down'})
+                        }}>Down</button>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            dispatch({type: 'removeIngredient', index: index})
+                        }}>Delete</button>
+                    </div>
+                </div>
             </li>
         )
     }
@@ -201,12 +207,14 @@ function RecipeForm() {
                 {id !== null ? 'Edit' : 'Create New'} Recipe
             </h2>
             <form>
-                <label htmlFor={'title'} >Title</label>
-                <input name={'title'} id={'title'} value={state.recipe.title} onChange={(e) => dispatch({type: 'changeTitle', value: e.target.value})} />
+                <label htmlFor={'title'}>Title</label>
+                <input name={'title'} id={'title'} className={'input-space-after'} value={state.recipe.title} onChange={(e) => dispatch({type: 'changeTitle', value: e.target.value})} />
+                <br />
                 <label htmlFor={'genre'}>Genre</label>
-                <input name={'genre'} id={'genre'} value={state.recipe.genre} onChange={(e) => dispatch({type: 'changeGenre', value: e.target.value})} />
+                <input name={'genre'} id={'genre'} className={'input-space-after'} value={state.recipe.genre} onChange={(e) => dispatch({type: 'changeGenre', value: e.target.value})} />
+                <br />
                 <label htmlFor={'category'}>Category</label>
-                <input name={'category'} id={'category'} value={state.recipe.category} onChange={(e) => dispatch({type: 'changeCategory', value: e.target.value})} />
+                <input name={'category'} id={'category'} className={'input-space-after'} value={state.recipe.category} onChange={(e) => dispatch({type: 'changeCategory', value: e.target.value})} />
                 {state.recipe.ingredients.length > 0 ?
                     <ul>
                         {/*consider switching to a function*/}

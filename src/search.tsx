@@ -96,9 +96,9 @@ function Search({isLocal} : {isLocal: boolean}) {
         return (
             <>
                 <h2>Find New Recipes</h2>
-                <Link to={'/local'}>Personal Recipes</Link>
-                <form>
-                    <label htmlFor={"recipeSearch"}>Search Recipes by Key Word</label>
+                <Link className={'link'} to={'/local'}>Personal Recipes</Link>
+                <form className={'search-form'}>
+                    <label htmlFor={"recipeSearch"}>Search Recipes by Key Word</label><br />
                     <input id={"recipeSearch"} value={searchDisplay} onChange={(e) => changeSearchDisplay(() => e.target.value)} />
                     <button onClick={(e) => {
                         e.preventDefault();
@@ -106,11 +106,11 @@ function Search({isLocal} : {isLocal: boolean}) {
                     }}>
                         Search
                     </button>
-                    {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'database'} /> : ''}
-                    {apiState.status === 'loading' ?
-                        <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
-                    {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
                 </form>
+                {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'database'} /> : ''}
+                {apiState.status === 'loading' ?
+                    <p>Searching recipes, please hold <span className="loader"></span></p> : ''}
+                {apiState.status === 'error' ? <p>{apiState.error.type}: {apiState.error.type === 'http' ? apiState.error.status : apiState.error.message}</p> : ''}
             </>
 
         )
@@ -120,8 +120,10 @@ function Search({isLocal} : {isLocal: boolean}) {
         return(
             <>
                 <h2>Personal Recipes</h2>
-                <Link to={'/'}>Search Recipes</Link>
-                <Link to={'/local/create'}>Create new recipe</Link>
+                <div id={'buttons'} style={{paddingBottom: '20px'}}>
+                    <Link className={'link'} to={'/'}>Search Recipes</Link>
+                    <Link className={'link'} to={'/local/create'}>Create new recipe</Link>
+                </div>
                 {apiState.status === 'success' ? <RecipeList recipes={apiState.data} source={'local'} /> : ''}
                 {apiState.status === 'loading' ?
                     <p>Retrieving recipes, please hold <span className="loader"></span></p> : ''}
@@ -142,15 +144,15 @@ function RecipeList({recipes, source}: { recipes: Recipe[], source: string }) {
         return (
             <div>
                 {recipes.map((r) =>
-                    <Link to={`/recipe/${source}/${r.id}`}>
+                    <Link className={'recipeListItem'} to={`/recipe/${source}/${r.id}`}>
                         <div key={r.id}>
                             <h3 style={{marginBottom: 0}}>{r.title}</h3>
-                            <div style={{display: 'inline-grid', gridTemplateColumns: 'auto auto', alignContent: 'center'}}>
-                                <div style={{textAlign: 'left', width: '6em'}}>Genre:</div>
-                                <div style={{textAlign: 'left', width: '12em'}}>{r.genre}</div>
-                                <div style={{textAlign: 'left', width: '6em'}}>Category:</div>
-                                <div style={{textAlign: 'left', width: '6em'}}>{r.category}</div>
-                            </div>
+                            <ul className={'list-inline'}>
+                                <li className={'list-inline-item'}>Genre:</li>
+                                <li className={'list-inline-item'}>{r.genre}</li><br />
+                                <li className={'list-inline-item'}>Category:</li>
+                                <li className={'list-inline-item'}>{r.category}</li>
+                            </ul>
                         </div>
                     </Link>
                 )}
