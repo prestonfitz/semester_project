@@ -1,5 +1,6 @@
 ﻿import type {ApiMeal, ApiResponse, Ingredient, Recipe} from './types.ts'
 
+// check to ensure that data from local storage is a recipe
 export function isRecipe(t: unknown): t is Recipe {
     return typeof t === 'object' &&
         t !== null &&
@@ -14,6 +15,7 @@ export function isRecipe(t: unknown): t is Recipe {
 }
 
 function isIngredientArray(t: unknown[]): t is Ingredient[] {
+    // an empty array is fine
     if (t.length === 0) {
         return true
     }
@@ -32,6 +34,7 @@ function isIngredientArray(t: unknown[]): t is Ingredient[] {
 }
 
 function isInstructionArray(t: unknown[]): t is string[] {
+    // an empty array is fine
     if (t.length === 0) {
         return true
     }

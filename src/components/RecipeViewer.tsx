@@ -9,6 +9,8 @@ export function RecipeViewer() {
     const baseUrl = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i='
     const [apiState, changeApiState] = useState<ApiStatus>({status: 'idle'})
 
+    // if the source is set to database, this will attempt to set the recipe using the API. If the source is local, it
+    // will attempt to set the recipe using local storage
     useEffect(() => {
         let cancelled = false;
             (async () => {
@@ -94,6 +96,7 @@ export function RecipeViewer() {
         }
     },[id, source])
 
+    // returns a component dependent on the status of apiState
     switch (apiState.status){
         case 'error':
             return (
@@ -148,6 +151,8 @@ export function RecipeViewer() {
                 </div>
             )
         case 'idle':
+            // idle is more meant for the search page, but we may get here anyway. If we do, the likely cause is that we
+            // somehow did not submit something to search
             return (
                 <p>You appear to have arrived here by mistake; please go back and select a recipe to view</p>
             )

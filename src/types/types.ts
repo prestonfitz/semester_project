@@ -142,6 +142,7 @@ export type ApiMeal = {
     strMeasure20: string | null
 }
 
+// These types assist in handling form editing and submission
 export type Action =
     | { type: 'changeTitle', value: string }
     | { type: 'changeGenre', value: string }

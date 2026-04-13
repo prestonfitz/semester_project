@@ -69,9 +69,16 @@ function reducer(prevState: FormState, action: Action): FormState {
             return {...prevState, recipe: {...prevState.recipe, instructions: reorderedArray}}
         }
         case 'submit':
+            // I only check to ensure that we have a title, as that is what will visually identify the recipe. After that,
+            // I am not going to tell a user how to input a recipe. This way they have the flexibility to input a well-structured
+            // recipe or grandma's cookie recipe that was made with a little love and a whole lot of vibes
             if (!prevState.recipe.title.trim()) {
                 return {...prevState, status: 'error', error: 'Hey buddy, you want to put in a title?'}
             }
+
+            // That being said, if I were going to put more validation, at least one ingredient, at least one instruction,
+            // and every ingredient having a measurement and vice versa would be good validations.
+
             localStorage.setItem(prevState.recipe.id, JSON.stringify(prevState.recipe))
             return {...prevState, status: 'submitted'}
         default:
@@ -86,6 +93,9 @@ function reducer(prevState: FormState, action: Action): FormState {
 
 function RecipeForm() {
     const {id} = useParams()
+
+    // If an ID param is provided, we will attempt to find an object in local storage to use as the base object. If none
+    // is provided, we will create an empty object.
     const setInitialState = (): FormState => {
         const initialState: Recipe = {
             // Another instance where I want randomness
@@ -123,14 +133,15 @@ function RecipeForm() {
 
     const [state, dispatch] = useReducer(reducer, setInitialState())
 
+    // This helps me redirect on submit
     const navigate = useNavigate()
-
     useEffect(() => {
         if (state.status === 'submitted'){
             navigate(`/recipe/local/${state.recipe.id}`)
         }
     }, [state, navigate])
 
+    // A subcomponent for inputting ingredients and their related measures. May be used n times
     const ingredientsInput = (ingredient: Ingredient, index: number) => {
         return (
             <li key={`ingredient${index}`} style={{listStyleType: 'none'}}>
@@ -164,6 +175,7 @@ function RecipeForm() {
         )
     }
 
+    // A subcomponent for inputting instructions. May be used n times
     function instructionsInput(instruction: string, index: number) {
         return (
             <li key={`instruction${index}`}>
@@ -185,6 +197,7 @@ function RecipeForm() {
         )
     }
 
+    // The main component
     return (
         <>
             <h2>

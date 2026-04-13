@@ -17,6 +17,9 @@ function Search({isLocal} : {isLocal: boolean}) {
         changeUrl(() => baseUrl + searchDisplay)
     }
 
+    // Starts by populating a default list of recipes. If the page is set to local, that will be the recipes in local storage.
+    // If it is not local, it will search one of ten preset search items randomly. If the searchDisplay is changed (which
+    // requires a submit), then this effect will trigger as well.
     useEffect(() => {
         let cancelled = false;
         (async () => {
@@ -92,6 +95,7 @@ function Search({isLocal} : {isLocal: boolean}) {
         }
     },[url, isLocal])
 
+    // The search bar for querying the API
     const searchForm = () => {
         return (
             <>
@@ -116,6 +120,7 @@ function Search({isLocal} : {isLocal: boolean}) {
         )
     }
 
+    // The header for local recipes
     const personalRecipes = () => {
         return(
             <>
@@ -139,6 +144,7 @@ function Search({isLocal} : {isLocal: boolean}) {
     )
 }
 
+// A subcomponent for showing the basic information for a recipe. Takes a list of recipes and maps them to HTML
 function RecipeList({recipes, source}: { recipes: Recipe[], source: string }) {
     if (recipes.length > 0) {
         return (
